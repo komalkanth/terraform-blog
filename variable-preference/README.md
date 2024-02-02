@@ -1,14 +1,3 @@
-+++
-title = 'Order of precedence of variables in Terraform'
-date = 2023-03-04
-draft = false
-tags = [
-    "terraform",
-    "iac",
-    "devops"
-    ]
-toc = true
-+++
 
 ## Variables in Terraform
 
