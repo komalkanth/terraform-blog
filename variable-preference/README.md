@@ -31,7 +31,7 @@ To test this flow, I have some Terraform config files in a folder as shown below
 Config files `'main.tf'` and `'variables.tf'` are populated with minimal code that takes in two variables called `source_of_var_1` and `source_of_var_2` and then prints them out in the Terraform outputs. We will input the same variables from multiple locations and the variables have values in a way to help us identify which file or location Terraform is picking the variable from. The rest of the files are initially empty.
 
 
-```
+```hcl
 #main.tf
 
 locals {
@@ -48,7 +48,7 @@ output "source_of_var_out_2" {
 }
 ```
 
-```
+```hcl
 #variables.tf
 
 variable "source_of_var_1" {
@@ -68,7 +68,7 @@ To start off, I am providing default value for both of the input variables as pa
 
 When I execute the Terraform code, we can see that it picks up the and outputs the correct variable as defined.
 
-```
+```bash
 > terraform plan
 
 Changes to Outputs:
