@@ -15,7 +15,7 @@ The above image summarizes the different locations we can input variables from a
 
 To test this flow, I have some Terraform config files in a folder as shown below.
 
-```
+```shell
 > tree
 .
 ├── main.tf
