@@ -68,7 +68,7 @@ To start off, I am providing default value for both of the input variables as pa
 
 When I execute the Terraform code, we can see that it picks up the and outputs the correct variable as defined.
 
-```bash
+```shell
 > terraform plan
 
 Changes to Outputs:
@@ -81,7 +81,7 @@ Terraform has options to  set different environmental variables in our operating
 
 First is an example of how we set the environment variables for Terraform and verify.
 
-```
+```shell
 > export TF_VAR_source_of_var_1=environment_variables
 > export TF_VAR_source_of_var_2=environment_variables
 > echo $TF_VAR_source_of_var_1
@@ -92,7 +92,7 @@ environment_variables
 
 Now when we run Terraform without any additional inputs, we can see that Terraform prefers the environmental variables over the default variable definitions.
 
-```
+```shell
 > terraform plan
 
 Changes to Outputs:
@@ -105,7 +105,7 @@ Now we keep all configuration as it is but introduce the same variable `source_o
 
 Below are the contents of `'terraform.tfvars'`.
 
-```
+```hcl
 #terraform.tfvars
 
 source_of_var_1 = "file_terraform.tfvars"
@@ -113,7 +113,7 @@ source_of_var_1 = "file_terraform.tfvars"
 
 When we execute Terraform, we can see that for the common variables present in `'variables.tf'` and `'terraform.tfvars'`, the latter is preferred but for those that are not common, Terraform falls back to the default value in `'variables.tf'` as seen below.
 
-```
+```shell
 > terraform plan
 
 Changes to Outputs:
@@ -127,7 +127,7 @@ For some use cases where we want to input senstive variables such as passwords, 
 
 I'm introducing a new value to the variable `source_of_var_1` via `'secrets.auto.tfvars'` which has been empty until now.
 
-```
+```hcl
 #secrets.auto.tfvars
 
 source_of_var_1 = "file_secrets.auto.tfvars"
@@ -135,7 +135,7 @@ source_of_var_1 = "file_secrets.auto.tfvars"
 
 The result of this on the Terraform execution is as follows.
 
-```
+```shell
 > terraform plan
 
 Changes to Outputs:
@@ -145,13 +145,13 @@ Changes to Outputs:
 
 In cases of multiple `'*.auto.tfvars'` files, the common input variables are picked from the files have names that are alphabetically later/higher get more precedence. Follow the example below to understand. I'm introducing a new value to the same variable `source_of_var_1` via a new file `'top_secrets.auto.tfvars'`. Since the letter 't' is lexicographically later to the letter 's', this file shoule be more preferred than `'secrets.auto.tfvars'`.
 
-```
+```hcl
 #top_secrets.auto.tfvars
 
 source_of_var_1 = "file_top_secrets.auto.tfvars"
 ```
 
-```
+```shell
 > terraform plan
 
 Changes to Outputs:
@@ -165,7 +165,7 @@ As we can see, without even mentioning the names of the `'*.auto.tfvars'` anywhe
 ### Step 6: Inputting the variable values via custom variables file *.tfvars
 Now we move forward and introduce the same variable `source_of_var_1` in a custom vars file called `'prod.tfvars'`. This is a custom file and is not automatically used by Terraform at the time of execution. Such files may typically be used when introducing a few variables that need to be introduced at the time deployment in some cases but not are not part of the core/base deployment. For example, when we want to separate variables belonging to different environments such as prod, dev, stage etc.
 
-```
+```hcl
 #prod.tfvars
 
 source_of_var_1 = "file_prod.tfvars"
@@ -173,7 +173,7 @@ source_of_var_1 = "file_prod.tfvars"
 
 When we run Terraform, this value from `'prod.tfvars'` is not used by default and Terraform falls back to the next best preferences, that are `'*.auto.tfvars'` > `'terraform.tfvars'` > 'environmental variables' > 'default variable defintion', in that order.
 
-```
+```shell
 > terraform plan
 
 Changes to Outputs:
@@ -183,7 +183,7 @@ Changes to Outputs:
 
 When using custom vars file, we need to specify the file name as an arguement in the command line.
 
-```
+```shell
 > terraform plan -var-file="prod.tfvars"
 
 Changes to Outputs:
@@ -199,7 +199,7 @@ Terraform allows us to pass names of multiple `'*.tfvars` files on the same CLI 
 
 I'm adding new values to the variables in `'shared.tfvars'` and the contents of both the `'*.tfvars` are shown combined here for brevity.
 
-```
+```hcl
 #prod.tfvars
 
 source_of_var_1 = "file_prod.tfvars"
@@ -215,7 +215,7 @@ source_of_var_2 = "file_shared.tfvars"
 
  When we pass both files to Terraform as input arguments on the CLI, it uses all the variables from both files that are not common but for the common variables, it only picks the ones passed on later in the CLI command. Follow the two CLI command examples and their output to understand this.
 
-```
+```shell
 # Example 1: prod.tfvars first and then shared.tfvars
 > terraform plan -var-file="prod.tfvars" -var-file="shared.tfvars"
 
@@ -243,7 +243,7 @@ The current status as per the file structure we have created until now is as fol
 - Without any command line arguments we have `*.auto.tfvars` > `terraform.tfvars` > 'default variable definition'
 - With CLI arguments we have `*.tfvars` > `*.auto.tfvars` > `terraform.tfvars` > 'default variable definition'
 
-```
+```shell
 > terraform plan
 
 Changes to Outputs:
@@ -253,7 +253,7 @@ Changes to Outputs:
 
 I am going to manually input the same variable `source_of_var_1` on the CLI as an argument.
 
-```
+```shell
 > terraform plan -var="source_of_var_1=first_cli_input"
 
 Changes to Outputs:
@@ -263,7 +263,7 @@ Changes to Outputs:
 
 What if we have two manual inputs as CLI arguments"? Similar to the file inputs, the latter one takes the precedence.
 
-```
+```shell
 > terraform plan -var="source_of_var_1=first_cli_input" -var="source_of_var_1=second_cli_input"
 
 Changes to Outputs:
@@ -273,7 +273,7 @@ Changes to Outputs:
 
 What if we have one manual input and one `'*.tfvars'` file as CLI arguments? The same logic applies as the latter input gets precedence. A few examples to show that are below.
 
-```
+```shell
 > terraform plan -var="source_of_var_1=first_cli_input" -var-file="prod.tfvars"
 
 Changes to Outputs:
