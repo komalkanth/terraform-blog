@@ -84,9 +84,9 @@ First is an example of how we set the environment variables for Terraform and ve
 ```
 > export TF_VAR_source_of_var_1=environment_variables
 > export TF_VAR_source_of_var_2=environment_variables
-> > echo $TF_VAR_source_of_var_1
+> echo $TF_VAR_source_of_var_1
 environment_variables
-> > echo $TF_VAR_source_of_var_2
+> echo $TF_VAR_source_of_var_2
 environment_variables
 ```
 
